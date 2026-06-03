@@ -1,0 +1,42 @@
+{% extends "SAE/index.html" %}
+{% block title %}Saisir un Cours{% endblock %}
+
+{% block content %}
+<div class="welcome-box">
+    <h2>Planifier un nouveau cours</h2>
+    <br>
+
+    <form method="POST" action="#">
+        {% csrf_token %}
+
+        <label class="fw-semibold mb-1">Titre du cours :</label><br>
+        <input type="text" name="titre" class="form-control" placeholder="Ex: R109 - Technologies Web" style="max-width: 400px;" required><br>
+
+        <label class="fw-semibold mb-1">Date du cours :</label><br>
+        <input type="date" name="date_cours" class="form-control" style="max-width: 400px;" required><br>
+
+        <label class="fw-semibold mb-1">Durée (en minutes) :</label><br>
+        <input type="number" name="duree" class="form-control" placeholder="Ex: 90" style="max-width: 400px;" required><br>
+
+        <label class="fw-semibold mb-1">Enseignant responsable :</label><br>
+        <select class="form-select" name="enseignant_id" style="max-width: 400px;" required>
+            <option value="" selected disabled hidden>Choisir un enseignant...</option>
+            {% for enseignant in enseignants %}
+                <option value="{{ enseignant.id }}">Mr/Mme {{ enseignant.nom }} ({{ enseignant.email }})</option>
+            {% endfor %}
+        </select>
+        <br>
+
+        <label class="fw-semibold mb-1">Groupe d'étudiants :</label><br>
+        <select class="form-select" name="groupe_id" style="max-width: 400px;" required>
+            <option value="" selected disabled hidden>Choisir un groupe...</option>
+            {% for groupe in groupes %}
+                <option value="{{ groupe.id }}">Groupe {{ groupe.nom }}</option>
+            {% endfor %}
+        </select>
+
+        <br><br>
+        <button type="submit" class="btn btn-emerald w-100 fw-bold py-2">Créer le cours</button>
+    </form>
+</div>
+{% endblock %}

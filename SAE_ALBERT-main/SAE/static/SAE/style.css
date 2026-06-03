@@ -1,0 +1,70 @@
+/* --- COMBO : CARBON MAT & VERT ÉMERAUDE --- */
+
+/* 1. Fond de page Noir Carbone (strictement aucun reflet bleu) */
+html, body {
+    background-color: #121212 !important;
+    color: #f4f4f5 !important;
+    min-height: 100vh;
+}
+
+/* 2. Le bloc central passe en Gris Graphite */
+.welcome-box {
+    background-color: #1e1e1e !important; /* Gris foncé neutre */
+    border: 1px solid #2d2d2d !important;  /* Bordure très fine */
+    border-left: 4px solid #10b981 !important; /* Ton liseré passe au Vert Émeraude ! */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* 3. Textes et Légendes clairs et nets */
+h1, h2, h3, h4, h5, h6 {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+}
+
+label, .fw-semibold {
+    color: #d4d4d8 !important; /* Gris neutre clair pour les intitulés */
+    display: inline-block;
+    margin-bottom: 6px;
+}
+
+.text-muted {
+    color: #a1a1aa !important; /* Pour les descriptions */
+}
+
+/* 4. Ajustement des champs de texte et listes déroulantes */
+.form-control, .form-select {
+    background-color: #2d2d2d !important; /* Fond d'input assorti au graphite */
+    border-color: #404040 !important;
+    color: #ffffff !important;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #10b981 !important; /* Focus vert quand on clique dessus */
+    box-shadow: 0 0 0 0.25px rgba(16, 185, 129, 0.25);
+}
+
+.form-control::placeholder {
+    color: #71717a !important;
+}
+
+/* 5. Les badges d'absences non-justifiées restent rouges, mais plus doux */
+.badge.bg-danger-subtle {
+    background-color: rgba(239, 68, 68, 0.2) !important;
+    color: #f87171 !important;
+    border: 1px solid rgba(239, 68, 68, 0.4) !important;
+}
+
+/* Bouton Vert Émeraude Personnalisé */
+.btn-emerald {
+    background-color: #10b981 !important;
+    border-color: #10b981 !important;
+    color: #ffffff !important;
+}
+
+/* Effet au survol du bouton (vert un peu plus foncé) */
+.btn-emerald:hover {
+    background-color: #059669 !important;
+    border-color: #059669 !important;
+}

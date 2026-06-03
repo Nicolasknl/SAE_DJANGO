@@ -1,0 +1,7 @@
+venv :
+python -m venv .venv
+.venv\Scripts\activate
+
+-biblio :
+
+pip install django pillow mysqlclient	

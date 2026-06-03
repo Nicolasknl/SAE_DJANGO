@@ -1,0 +1,76 @@
+{% extends "SAE/index.html" %}
+{% block title %}Consulter un Étudiant{% endblock %}
+
+{% block content %}
+<div class="welcome-box">
+    <h2>Suivi des absences par étudiant</h2>
+    <p class="text-muted">Recherchez un étudiant pour voir l'historique de ses absences.</p>
+    <br>
+
+    <h4>Rechercher un étudiant</h4>
+    <form method="GET" action="#">
+        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 200px; max-width: 300px;">
+                <label class="fw-semibold mb-1">Nom :</label><br>
+                <input type="text" name="nom_recherche" class="form-control" placeholder="Ex: Martin" required>
+            </div>
+            <div style="flex: 1; min-width: 200px; max-width: 300px;">
+                <label class="fw-semibold mb-1">Prénom :</label><br>
+                <input type="text" name="prenom_recherche" class="form-control" placeholder="Ex: Lucas" required>
+            </div>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-emerald w-100 fw-bold py-2">Rechercher</button>
+    </form>
+
+    <hr class="my-4">
+
+    <h4>Historique des absences</h4>
+
+    <table class="table table-striped table-hover mt-3">
+        <thead>
+            <tr>
+                <th>Date & Heure du cours</th>
+                <th>Nom du Cours</th>
+                <th>Enseignant</th>
+                <th>Statut</th>
+                <th>Justificatif</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for absence in absences %}
+            <tr>
+                <td>{{ absence.cours.date_cours|date:"d/m/Y" }}</td>
+                <td>{{ absence.cours.titre }}</td>
+                <td>M. {{ absence.cours.enseignant.nom }}</td>
+                <td>
+                    {% if absence.justifie %}
+                        <span class="badge bg-success">Justifiée</span>
+                    {% else %}
+                        <span class="badge bg-danger">Non justifiée</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if absence.justification %}
+                        <code class="text-info">{{ absence.justification }}</code>
+                    {% else %}
+                        <span class="text-muted">Aucun</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center text-muted py-4">Aucune absence trouvée ou aucune recherche effectuée.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+
+    <div class="p-3 bg-body-secondary rounded border border-secondary d-flex justify-content-between align-items-center">
+        <span class="badge bg-dark border border-secondary fs-5 text-light">{{ total_absences }} absence(s)</span>
+    </div>
+
+</div>
+{% endblock %}
