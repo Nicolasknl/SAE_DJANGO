@@ -1,0 +1,47 @@
+{% extends "SAE/index.html" %}
+{% block title %}Saisir les Absences{% endblock %}
+
+{% block content %}
+<div class="welcome-box">
+    <h2>Gestion des Absences pour un cours</h2>
+    <p class="text-muted">Sélectionnez un cours pour y ajouter des absences (soit de masse par fichier CSV, soit manuellement).</p>
+    <br>
+
+    <form method="POST" enctype="multipart/form-data" action="#">
+        {% csrf_token %}
+
+        <h4>Choix du cours</h4>
+        <label class="fw-semibold mb-1">Sélectionner le cours concerné :</label><br>
+
+        <select class="form-select" name="cours_id" style="max-width: 500px;" required>
+            <option value="" selected disabled hidden>Choisir un cours...</option>
+            {% for cours in liste_cours %}
+                <option value="{{ cours.id }}">{{ cours.date_cours|date:"d/m/Y" }} - {{ cours.titre }} - {{ cours.groupe.nom }}</option>
+            {% endfor %}
+        </select>
+
+        <hr class="my-4">
+
+        <h4>Saisie de masse par fichier (CSV)</h4>
+
+        <div class="bg-body-secondary p-3 rounded mb-3 border border-secondary" style="max-width: 650px;">
+            <strong>Aide - Structure du fichier CSV attendu :</strong><br>
+            Le fichier doit être au format <code>.csv</code>, utiliser la virgule comme séparateur, et respecter l'ordre suivant :
+            <br><code class="text-info">nom, prenom, date_debut, date_fin, justificatif_fourni</code>
+            <br><br>
+            <small class="text-muted">
+                <strong>Exemple de ligne dans le fichier :</strong><br>
+                Martin, Lucas, 18/05/2026 08:30, 18/05/2026 10:30, Certificat_Medical.pdf
+                <br>
+                <em>(Si l'étudiant n'a pas encore fourni de justificatif, laissez la case vide après la dernière virgule)</em>
+            </small>
+        </div>
+
+        <label class="fw-semibold mb-2">Choisir le fichier d'absences (.csv) :</label><br>
+        <input type="file" class="form-control" name="fichier_csv" accept=".csv" style="max-width: 500px;" required><br>
+
+        <button type="submit" class="btn btn-success">Importer les absences et justificatifs</button>
+    </form>
+    <hr class="my-4">
+</div>
+{% endblock %}

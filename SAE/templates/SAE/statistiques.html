@@ -1,0 +1,105 @@
+{% extends "SAE/index.html" %}
+{% block title %}Suivi Général{% endblock %}
+
+{% block content %}
+<div class="welcome-box">
+    <h2>Suivi général</h2>
+    <p class="text-muted">Recherchez un étudiant ou un enseignant.</p>
+    <br>
+
+    <h4>Rechercher un profil</h4>
+    <form method="GET" action="{% url 'statistiques' %}">
+        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 200px; max-width: 300px;">
+                <label class="fw-semibold mb-1">Nom :</label><br>
+                <input type="text" name="nom_recherche" class="form-control" placeholder="Ex: Martin" value="{{ nom_recherche }}" required>
+            </div>
+            <div style="flex: 1; min-width: 200px; max-width: 300px;">
+                <label class="fw-semibold mb-1">Prénom :</label><br>
+                <input type="text" name="prenom_recherche" class="form-control" placeholder="Ex: Lucas" value="{{ prenom_recherche }}" required>
+            </div>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-emerald w-100 fw-bold py-2">Rechercher</button>
+    </form>
+
+    <hr class="my-4">
+
+    {% if recherche_effectuee %}
+        {% if etudiant %}
+            <div class="alert alert-info py-2 mb-4 d-flex justify-content-between align-items-center">
+                <div>👤 <strong>Étudiant trouvé :</strong> {{ etudiant.prenom }} {{ etudiant.nom }} (Groupe : {{ etudiant.groupe.nom }})</div>
+                <a href="{% url 'supprimer_etudiant' etudiant.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Supprimer définitivement cet étudiant et TOUTES ses absences associés ?');">🗑️ Supprimer l'étudiant</a>
+            </div>
+        {% elif enseignant %}
+            <div class="alert alert-success py-2 mb-4 d-flex justify-content-between align-items-center">
+                <div>👨‍🏫 <strong>Enseignant trouvé :</strong> {{ enseignant.prenom }} {{ enseignant.nom }}</div>
+                <a href="{% url 'supprimer_enseignant' enseignant.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Supprimer définitivement cet enseignant, ses cours et ses absences associées ?');">🗑️ Supprimer l'enseignant</a>
+            </div>
+        {% else %}
+            <div class="alert alert-danger py-2 mb-4">
+                ❌ Aucun étudiant ni enseignant trouvé au nom de "<strong>{{ prenom_recherche }} {{ nom_recherche }}</strong>".
+            </div>
+        {% endif %}
+    {% endif %}
+
+    <h4>Historique des absences</h4>
+
+    <div class="table-responsive">
+        <table class="table table-dark table-hover mt-3 align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Étudiant</th>
+                    <th>Date du cours</th>
+                    <th>Nom du Cours</th>
+                    <th>Enseignant</th>
+                    <th>Statut</th>
+                    <th>Justificatif</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for absence in absences %}
+                <tr>
+                    <td><strong>{{ absence.etudiant.prenom }} {{ absence.etudiant.nom }}</strong></td>
+                    <td>{{ absence.cours.date_cours|date:"d/m/Y" }}</td>
+                    <td class="fw-bold text-info">{{ absence.cours.titre }}</td>
+                    <td>M. {{ absence.cours.enseignant.nom }}</td>
+                    <td>
+                        {% if absence.justifie %}
+                            <span class="badge bg-success">Justifiée</span>
+                        {% else %}
+                            <span class="badge bg-danger">Non justifiée</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if absence.justification %}
+                            <code class="text-info">{{ absence.justification }}</code>
+                        {% else %}
+                            <span class="text-muted">Aucun</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        <div class="btn-group btn-group-sm">
+                            <a href="{% url 'modifier_absence' absence.id %}" class="btn btn-outline-warning">✏️ Modifier</a>
+                            <a href="{% url 'supprimer_absence' absence.id %}" class="btn btn-outline-danger" onclick="return confirm('Supprimer définitivement cette absence ?');">🗑️ Supprimer</a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">Aucune absence trouvée ou aucune recherche effectuée.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <br>
+
+    <div class="p-3 bg-body-secondary rounded border border-secondary d-flex justify-content-between align-items-center">
+        <span class="badge bg-dark border border-secondary fs-5 text-light">{{ total_absences }} absence(s)</span>
+    </div>
+
+</div>
+{% endblock %}

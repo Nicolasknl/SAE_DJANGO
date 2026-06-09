@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr" data-bs-theme="dark">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planning - {{ enseignant.prenom }} {{ enseignant.nom }}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'SAE/style.css' %}">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-secondary shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{% url 'index' %}">RT Absences</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Accueil</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'saisir_cours' %}">Saisir Cours</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'saisir_absence' %}">Saisir Absence</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'statistiques' %}">Historiques Absences</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mt-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom border-secondary">
+            <h1 class="h2">📅 Planning Individuel</h1>
+            <a href="{% url 'index' %}" class="btn btn-outline-secondary btn-sm">Retour au Tableau de Bord</a>
+        </div>
+
+        <div class="card bg-body-tertiary border shadow-sm p-4 mb-4">
+            <h3 class="text-success">{{ enseignant.prenom }} {{ enseignant.nom }}</h3>
+            <p class="text-muted mb-0">✉️ Contact : <a href="mailto:{{ enseignant.email }}" class="text-info text-decoration-none">{{ enseignant.email }}</a></p>
+        </div>
+
+        <div class="card bg-body-tertiary border shadow-sm p-4">
+            <h4 class="mb-3">Liste des prochains cours planifiés</h4>
+            <div class="table-responsive">
+                <table class="table table-dark table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Matière</th>
+                            <th>Groupe ciblé</th>
+                            <th>Durée du cours</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cours in prochains_cours %}
+                        <tr>
+                            <td>{{ cours.date_cours|date:"d/m/Y" }}</td>
+                            <td class="fw-bold text-info">{{ cours.titre }}</td>
+                            <td><span class="badge bg-secondary">{{ cours.groupe.nom }}</span></td>
+                            <td>{{ cours.duree }} min</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center text-muted py-4">
+                                Aucun cours de prévu pour cet enseignant à partir d'aujourd'hui.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
